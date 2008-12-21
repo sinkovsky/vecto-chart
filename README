@@ -1,0 +1,7 @@
+This package is simple charting library based on Vecto library.
+
+Now it allows to create simple line charts.
+
+Pie charts and bar charts are in development.
+
+Greatly inspired by adw-charting.
