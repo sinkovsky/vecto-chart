@@ -1,3 +1,12 @@
+2008-12-27  Sergey Sinkovkiy  <glorybox.away@gmail.com>
+
+	* src/vecto-chart.lisp (draw-grid*): new method
+	(draw-grid): new helper method
+	* colors now aren't rotated
+	* (hex->rgb): new method to convert hex colors #aabbcc to (0.rr 0.gg 0.bb) style
+	* with-line-chart now accepts :draw-grid argument which can be T or NIL
+	* minor fixes
+	
 2008-12-07 Sergey Sinkovskiy <glorybox.away@gmail.com>
 
 	* graph-server.lisp: removed commented out condition

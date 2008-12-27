@@ -1,9 +1,9 @@
 (in-package #:cl-user)
 
 (defpackage :vecto-chart-asd
-  (:use :cl :asdf))
+  (:use #:cl #:asdf))
 
-(in-package :vecto-chart-asd)
+(in-package #:vecto-chart-asd)
 
 (defsystem "vecto-chart"
   :description "vecto-chart: charting library based on Vecto"
