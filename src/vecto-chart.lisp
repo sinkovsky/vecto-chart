@@ -24,7 +24,8 @@
    (label-y :accessor chart-label-y :initform "value")
    (draw-labels-p :accessor chart-draw-labels-p :initform t)
    (line-width :accessor chart-line-width :initform 3)
-   (draw-grid-p :initarg :draw-grid :accessor chart-draw-grid-p :initform nil)))
+   (draw-grid-p :initarg :draw-grid :accessor chart-draw-grid-p :initform nil)
+   (draw-axis-p :initarg :draw-axis :accessor chart-draw-axis-p :initform t)))
 
 (defclass pie-chart (chart)
   ())
@@ -37,14 +38,21 @@
 	(with-canvas (:width ,width :height ,height)
 	  ,@body)))
 
-(defmacro with-line-chart ((&key width height draw-grid) &body body)
-  `(let ((*current-chart* (make-instance 'line-chart
-										 :width ,width
-										 :height ,height
-										 :offset (* ,height 0.08)
-										 :draw-grid ,draw-grid)))
-	 (with-canvas (:width ,width :height ,height)
-	   ,@body)))
+(defmacro with-line-chart ((&key width height draw-grid draw-axis)
+						   &body body)
+  (let ((width-value-name (gensym))
+		(height-value-name (gensym)))
+	`(let ((,width-value-name ,width)
+		   (,height-value-name ,height))
+	   (let ((*current-chart*
+			  (make-instance 'line-chart
+							 :width ,width-value-name
+							 :height ,height-value-name
+							 :offset (* ,height-value-name 0.08)
+							 :draw-grid ,draw-grid
+							 :draw-axis ,draw-axis)))
+		 (with-canvas (:width ,width-value-name :height ,height-value-name)
+		   ,@body)))))
 
 
 (defun hex->rgb (hex-color)
@@ -126,7 +134,7 @@
 			(move-to offset (dy->y chart (+ min-y (* step y-step))))
 			(line-to (- width offset) (dy->y chart (+ min-y (* step y-step)))))
 		  
-		  (stroke))))))
+		  (stroke)))))
 
 (define-condition wrong-argument-structure (condition)
   ())
@@ -223,7 +231,7 @@
 ;;; Main drawing method
 ;;; returns png data stream
 (defmethod render-png-stream* ((chart line-chart))
-  (with-slots (data have-x-y line-width draw-grid-p) chart
+  (with-slots (data have-x-y line-width draw-grid-p draw-axis-p) chart
 	(let ((line-offset (/ line-width 2))
 		  (next-color 0))
 	  
@@ -232,8 +240,12 @@
 	  ;; calculate ratios for given chart
 	  (calculate-ratios chart)
 
+	  (when draw-axis-p
+		(draw-axis))
+
 	  (when draw-grid-p
 		(draw-grid))
+
 	  ;; iterating through data and drawing line
 	  (loop for dataset in data do
 		   (if have-x-y

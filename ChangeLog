@@ -1,4 +1,9 @@
-2008-12-27  Sergey Sinkovkiy  <glorybox.away@gmail.com>
+2008-12-28  Sergey Sinkovskiy  <glorybox.away@gmail.com>
+	* src/vecto-chart.lisp (render-png-stream): draw-axis now part of this method
+	* src/vecto-chart.lisp (with-line-chart): fixed leaked abstraction (width height forms evaluated several times in macro)
+	* src/vecto-chart.lisp (line-chart): new slot - draw-grid-p, defaults to T
+
+2008-12-27  Sergey Sinkovskiy  <glorybox.away@gmail.com>
 
 	* src/vecto-chart.lisp (draw-grid*): new method
 	(draw-grid): new helper method
