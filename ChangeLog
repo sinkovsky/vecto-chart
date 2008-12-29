@@ -1,3 +1,7 @@
+2008-12-29  Sergey Sinkovskiy  <glorybox.away@gmail.com>
+
+	* src/vecto-chart.lisp (draw-grid*): minor clean up
+
 2008-12-28  Sergey Sinkovskiy  <glorybox.away@gmail.com>
 	* src/vecto-chart.lisp (render-png-stream): draw-axis now part of this method
 	* src/vecto-chart.lisp (with-line-chart): fixed leaked abstraction (width height forms evaluated several times in macro)

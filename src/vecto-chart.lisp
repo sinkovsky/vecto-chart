@@ -113,26 +113,32 @@
 (defmethod draw-grid* ((chart line-chart))
   (with-slots (offset have-x-y min-x min-y max-x max-y data height width) chart
 	  (let ((x-step nil)
-			(y-step nil))
+			(y-step nil)
+			(top-margin (- height offset))
+			(right-margin (- width offset)))
 		(if have-x-y
 			(setf x-step (/ (- max-x min-x) 10.0))
 			(setf x-step 2))
 		(setf y-step (/ (- max-y min-y) 8.0))
 		(with-graphics-state
+		  (set-line-width 0.4)
+		  (set-dash-pattern #(5 5) 5)
+
 		  ;; drawing x-grid
 		  (do ((step 1 (1+ step)))
 			  ((>= step (/ max-x x-step)))
-			(set-line-width 0.4)
-			(set-dash-pattern #(10 10) 5)
-			(move-to (dx->x chart (+ min-x (* step x-step))) offset)
-			(line-to (dx->x chart (+ min-x (* step x-step))) (- height offset)))
+			(let (x)
+			  (setf x (dx->x chart (+ min-x (* step x-step))))
+			  (move-to x offset)
+			  (line-to x top-margin)))
+
 		  ;; drawing y-grid
 		  (do ((step 1 (1+ step)))
 			  ((>= step (/ max-y y-step)))
-			(set-line-width 0.4)
-			(set-dash-pattern #(5 5) 5)
-			(move-to offset (dy->y chart (+ min-y (* step y-step))))
-			(line-to (- width offset) (dy->y chart (+ min-y (* step y-step)))))
+			(let (y)
+			  (setf y (dy->y chart (+ min-y (* step y-step))))
+			  (move-to offset y)
+			  (line-to right-margin y)))
 		  
 		  (stroke)))))
 
